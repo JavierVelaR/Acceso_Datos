@@ -32,12 +32,12 @@ public class InsertarRegistro {
 
             // Crear el objeto Empresa con los datos a insertar
             int id = 2;
-            String nombre = "Hasbulla";
-            String pais = "Rusia";
+            String nombre = "Martin";
+            String pais = "Martin";
 
 
             // Insertar el objeto en la tabla empresa
-            String sql = "INSERT INTO empresa (id, nombre, pais) VALUES (?, ?, ?)";
+            String sql = "INSERT INTO empresas (id, nombre, pais) VALUES (?, ?, ?)";
             stmt = conn.prepareStatement(sql);
             stmt.setInt(1, id);
             stmt.setString(2, nombre);
@@ -46,7 +46,7 @@ public class InsertarRegistro {
 
 
             // Mostrar todos los datos de la tabla empresa
-            sql = "SELECT * FROM empresa";
+            sql = "SELECT * FROM empresas";
             stmt = conn.prepareStatement(sql);
             rs = stmt.executeQuery();
             while (rs.next()) {

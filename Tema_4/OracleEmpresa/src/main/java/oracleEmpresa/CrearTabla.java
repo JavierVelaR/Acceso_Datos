@@ -35,8 +35,8 @@ public class CrearTabla {
                 statement = conexion.createStatement();
 
 
-                // Crear la tabla "empresa"
-                String crearTablaSQL = "CREATE TABLE empresa ("
+                // Crear la tabla "empresas"
+                String crearTablaSQL = "CREATE TABLE empresas ("
                         + "id INT PRIMARY KEY,"
                         + "nombre VARCHAR(50),"
                         + "pais VARCHAR(50)"
@@ -44,7 +44,7 @@ public class CrearTabla {
                 statement.executeUpdate(crearTablaSQL);
 
 
-                System.out.println("Tabla 'empresa' creada con éxito.");
+                System.out.println("Tabla 'empresas' creada con éxito.");
             } catch (SQLException e) {
                 e.printStackTrace();
             } finally {
