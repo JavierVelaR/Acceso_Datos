@@ -5,9 +5,17 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.List;
+
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.cfg.Configuration;
+import org.hibernate.context.internal.ThreadLocalSessionContext;
+import org.hibernate.engine.spi.SessionFactoryImplementor;
+import org.hibernate.query.Query;
 
 
-public class InsertarRegistro {
+/*public class InsertarRegistro {
     @SuppressWarnings("resource")
 	public static void main(String[] args) {
         Connection conn = null;
@@ -91,4 +99,70 @@ public class InsertarRegistro {
             }
         }
     }
+}
+*/
+
+//Con Hibernate
+public class InsertarRegistro {
+	@SuppressWarnings("static-access")
+	public static void main(String[] args) {
+		// Configurar la sesion del Hibernate
+		SessionFactory sessionFactory = new Configuration().configure() // llama al fichero hibernate.cfg.xml
+
+				// .configure("hibernate.cfg.xml") // Ruta del archivo configuracion
+				.buildSessionFactory(); // Construir la sesion de Hibernate
+
+		// Configurar la sesion en el contexto actual
+		ThreadLocalSessionContext context = new ThreadLocalSessionContext((SessionFactoryImplementor) sessionFactory);
+		context.bind(sessionFactory.openSession());
+
+		try {
+			// Obtener la sesion actual
+			Session session = context.currentSession();
+
+			// Iniciar transaccion
+			session.beginTransaction();
+
+			// Realizar una consulta para obtener los datos antes de la inserción
+			String selectHqlBeforeInsert = "FROM Categorias";
+			Query<Categorias> selectQueryBeforeInsert = session.createQuery(selectHqlBeforeInsert, Categorias.class);
+			List<Categorias> productosBeforeInsert = selectQueryBeforeInsert.list();
+
+			// Imprimir resultados antes de la inserción
+			System.out.println("\nRegistros en la tabla categorias antes de la inserción:");
+			for (Categorias f : productosBeforeInsert) {
+				System.out.println(f.toString());
+			}
+
+			// Añadir un nuevo registro
+			Categorias nuevoProducto = new Categorias();
+			nuevoProducto.setId(3);
+			nuevoProducto.setCategoria("Alpargata");
+			nuevoProducto.setSubcategoria("Cosmeticos");
+			session.save(nuevoProducto);
+
+			// Realizar una nueva consulta para obtener los datos después de la inserción
+			String selectHqlAfterInsert = "FROM Categorias";
+			Query<Categorias> selectQueryAfterInsert = session.createQuery(selectHqlAfterInsert, Categorias.class);
+			List<Categorias> productosAfterInsert = selectQueryAfterInsert.list();
+
+			// Imprimir resultados después de la inserción
+			System.out.println("\nRegistros en la tabla categorias después de la inserción:");
+			for (Categorias f : productosAfterInsert) {
+				System.out.println(f.toString());
+			}
+
+			// Hacer commit de la transacción
+			session.getTransaction().commit();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			// Desligar la sesion del contexto
+			ThreadLocalSessionContext.unbind(sessionFactory);
+			// Cerrar la sesion del Hibernate
+			sessionFactory.close();
+		}
+
+	}
 }

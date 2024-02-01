@@ -4,9 +4,17 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.cfg.Configuration;
+import org.hibernate.context.internal.ThreadLocalSessionContext;
+import org.hibernate.engine.spi.SessionFactoryImplementor;
+import org.hibernate.query.Query;
 
-public class MostrarRegistros {
+//Sin hibernate
+/*public class MostrarRegistros {
     public static void mostrarRegistros() {
         Connection conexion = CrearTabla.obtenerConexion();
 
@@ -59,4 +67,59 @@ public class MostrarRegistros {
         // Ejemplo de uso
         mostrarRegistros();
     }
+}
+*/
+
+//Con hibernate
+public class MostrarRegistros {
+
+	@SuppressWarnings("static-access")
+	public static void main(String[] args) {
+		//Configurar la sesion del Hibernate
+				SessionFactory sessionFactory = new Configuration()
+						.configure() // llama al fichero hibernate.cfg.xml
+						
+						// .configure("hibernate.cfg.xml") // Ruta del archivo configuracion
+						.buildSessionFactory(); // Construir la sesion de Hibernate
+				
+				// Configurar la sesion en el contexto actual
+				ThreadLocalSessionContext context = new ThreadLocalSessionContext((SessionFactoryImplementor) sessionFactory);
+				context.bind(sessionFactory.openSession());
+				
+				try {
+					// Obtener la sesion actual
+					Session session = context.currentSession();
+					
+					// Iniciar transaccion
+					session.beginTransaction();
+					
+					// Crear consulta HQL para seleccionar todos los registros de la tabla Empresa
+		            String hql = "FROM Empresa";
+		            Query<Empresa> query = session.createQuery(hql, Empresa.class);
+
+
+		            // Ejecutar consulta y obtener resultados
+		            List<Empresa> empresas = query.list();
+
+
+		            // Imprimir resultados
+		            System.out.println("Registros en la tabla Empresa:");
+		            for (Empresa f : empresas) {
+		                System.out.println(f.toString());
+		            }
+					
+					// Hacer el commit de la transaccion
+					session.getTransaction().commit();
+										
+				} catch (Exception e) {
+					e.printStackTrace();
+				}finally {
+					// Desligar la sesion del contexto
+					ThreadLocalSessionContext.unbind(sessionFactory);
+					// Cerrar la sesion del Hibernate
+					sessionFactory.close();
+				}
+
+	}
+
 }
