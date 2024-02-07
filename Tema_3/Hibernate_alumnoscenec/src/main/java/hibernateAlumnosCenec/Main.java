@@ -24,7 +24,7 @@ public class Main {
 		
 		try {
 			// Crea el objeto alumno
-			Alumno alumno = new Alumno ("Pereira","Montañez","Vidales",false,"20020330",648330238);
+			Alumno alumno = new Alumno ("Lucia","Sanchez","Ortega",true,"20020330",648330238);
 			
 			// Obtener la sesion actual
 			Session session = context.currentSession();

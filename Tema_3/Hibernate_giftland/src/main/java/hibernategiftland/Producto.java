@@ -31,6 +31,10 @@ public class Producto {
 	@Column(name = "unidades")
 	private int unidades;
 
+	public Producto() {
+		
+	}
+	
 	public Producto(String nombre, String descripcion, float precio, String fabricante, int unidades) {
 		super();
 		this.nombre = nombre;
