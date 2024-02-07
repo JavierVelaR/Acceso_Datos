@@ -38,6 +38,10 @@ public class Producto {
 		this.precio = precio;
 		this.fabricante = fabricante;
 	}
+	
+	public int getId() {
+		return id;
+	}
 
 	public String getNombre() {
 		return nombre;
