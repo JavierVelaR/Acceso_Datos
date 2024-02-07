@@ -1,4 +1,4 @@
-package hibernateAlumnosCenec;
+package hibernate_Fabricante_Producto;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -10,40 +10,53 @@ public class Main {
 
 	@SuppressWarnings("static-access")
 	public static void main(String[] args) {
-		
-		//Configurar la sesion del Hibernate
-		SessionFactory sessionFactory = new Configuration()
-				.configure() // llama al fichero hibernate.cfg.xml
-				
+		// Configurar la sesion del Hibernate
+		SessionFactory sessionFactory = new Configuration().configure() // llama al fichero hibernate.cfg.xml
+
 				// .configure("hibernate.cfg.xml") // Ruta del archivo configuracion
 				.buildSessionFactory(); // Construir la sesion de Hibernate
-		
+
 		// Configurar la sesion en el contexto actual
 		ThreadLocalSessionContext context = new ThreadLocalSessionContext((SessionFactoryImplementor) sessionFactory);
 		context.bind(sessionFactory.openSession());
-		
+
 		try {
-			// Crea el objeto alumno
-			Alumno alumno = new Alumno ("Antonio","Sandor","Ortiz",false,"20020330",648330238);
-			
-			// Obtener la sesion actual
+			Fabricante fabricante = new Fabricante("ASUS Gaming");
+
+			// Obtener la sesión actual
 			Session session = context.currentSession();
-			
-			// Iniciar transaccion
+
+			// Iniciar transacción
 			session.beginTransaction();
-			
-			// Guardar objeto en la base de datos
-			session.save(alumno);
-			
-			// Hacer el commit de la transaccion
+
+			// Guardar objeto fabricante en la base de datos
+			session.save(fabricante);
+
+			// Hacer commit de la transacción
 			session.getTransaction().commit();
-			
-			// Imprimir alumno guardado en la base datatos
-			System.out.println("Alumno: " + alumno);
-			
+
+			// Crear objeto producto
+			// Crear objeto producto
+			Producto producto = new Producto("PORTATIL gaming", 3000f, fabricante);
+
+			// Obtener la sesión actual
+			Session session1 = context.currentSession();
+
+			// Iniciar transacción
+			session1.beginTransaction();
+
+			// Guardar objeto producto en la base de datos
+			session1.save(producto);
+
+			// Hacer commit de la transacción
+			session1.getTransaction().commit();
+
+			System.out.println(producto.toString());
+			System.out.println(fabricante.toString());
+
 		} catch (Exception e) {
 			e.printStackTrace();
-		}finally {
+		} finally {
 			// Desligar la sesion del contexto
 			ThreadLocalSessionContext.unbind(sessionFactory);
 			// Cerrar la sesion del Hibernate
@@ -51,4 +64,5 @@ public class Main {
 		}
 
 	}
+
 }
