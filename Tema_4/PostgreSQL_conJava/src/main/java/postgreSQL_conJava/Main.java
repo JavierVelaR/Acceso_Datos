@@ -1,12 +1,6 @@
 package postgreSQL_conJava;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.List;
-
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
@@ -22,7 +16,6 @@ public class Main {
             mostrarRegistros(sessionFactory);
         }
     }
-
 
     private static void insertarRegistro(SessionFactory sessionFactory, String nombre, int edad) {
         try (Session session = sessionFactory.openSession()) {
@@ -40,7 +33,6 @@ public class Main {
             System.out.println("Registro insertado con éxito.");
         }
     }
-
 
     private static void mostrarRegistros(SessionFactory sessionFactory) {
         try (Session session = sessionFactory.openSession()) {
